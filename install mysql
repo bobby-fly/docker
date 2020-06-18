@@ -1,0 +1,50 @@
+官方搜索镜像版本
+https://hub.docker.com/_/mysql?tab=tags
+
+拉取指定版本
+docker pull mysql:5.7.30
+
+启动容器并设置数据库密码
+
+docker run -id --name produce-mysql -p 33306:3306 -e MYSQL_ROOT_PASSWORD=******* mysql:5.7.30
+
+查看容器
+ docker ps |grep mysql
+9776c08f06c8        mysql:5.7.30        "docker-entrypoint.s…"   About a minute ago   Up About a minute   33060/tcp, 0.0.0.0:33306->3306/tcp   produce-mysql
+
+设置数据库用户权限
+
+进入容器
+docker exec -it produce-mysql bash
+root@9776c08f06c8:/# mysql -u root -p
+Enter password: 
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+授权用户查询、插入、更新权限
+GRANT SELECT，INSERT，UPDATE ON databasename.tablename TO 'username'@'host';
+
+撤销用户查询、插入、更新权限
+REVOKE SELECT，INSERT，UPDATE ON databasename.tablename FROM 'username'@'host';
+
+查看容器用户权限
+mysql> use mysql
+mysql> select user,host from user;
++---------------+-----------+
+| user          | host      |
++---------------+-----------+
+| root          | %         |
+| mysql.session | localhost |
+| mysql.sys     | localhost |
+| root          | localhost |
++---------------+-----------+
+4 rows in set (0.00 sec)
+
