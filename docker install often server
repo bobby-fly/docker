@@ -1,1 +1,55 @@
+安装centos 7.4
+
+查看docker hub
+
+https://hub.docker.com/_/centos?tab=tags
+
+找到需要安装的镜像版本
+
+拉去镜像
+docker pull centos:centos7.4.1708
+
+查看下载镜像
+docker images
+
+运行容器-通过exec 进入centos 容器
+
+docker run -itd --name centos7.4 centos:centos7.4.1708
+
+查看容器运行信息
+docker ps |grep centos
+
+
+安装运行nginx
+
+拉取镜像
+docker pull nginx:1.19.0
+
+查看镜像
+docker images |grep nginx
+
+运行容器
+docker run --name nginx-update-web -p 9000:80 -d nginx:1.19.0
+
+
+安装node.js
+
+拉取镜像
+docker pull node:latest
+
+查看本地镜像
+docker images |grep node
+
+运行容器
+docker run -itd --name node-production node:latest
+
+进入容器后台
+docker exec -it node-production /bin/bash
+ 
+
+
+安装PHP7.1
+
+拉取镜像
+docker pull php:7.1.30-fpm
 
