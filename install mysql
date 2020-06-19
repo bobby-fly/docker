@@ -48,3 +48,7 @@ mysql> select user,host from user;
 +---------------+-----------+
 4 rows in set (0.00 sec)
 
+授权并更改密码
+GRANT ALL PRIVILEGES ON *.* TO "root"@"%" IDENTIFIED BY 'Root123@';
+
+
