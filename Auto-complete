@@ -1,0 +1,11 @@
+docker 命令自动补全
+
+自动补齐需要依赖工具bash-complete
+
+yum  install -y bash-completion
+
+使配置脚本生效
+
+source /usr/share/bash-completion/completions/docker
+
+source /usr/share/bash-completion/bash_completion
