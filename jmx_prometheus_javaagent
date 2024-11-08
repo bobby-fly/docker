@@ -1,0 +1,60 @@
+jvm 
+
+jvm监控
+
+https://github.com/prometheus/jmx_exporter/tree/release-1.0.1/docs
+
+
+
+
+# cat config.yaml 
+rules:
+- pattern: ".*"
+
+
+--------
+cat admin-Dockerfile
+
+FROM  xrcmartins/jdk11-mvn-chrome-chromedriver:latest
+
+USER root
+WORKDIR /jars
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+# 设置环境变量，指定 Nacos 服务器的地址和命名空间
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir -p  /jars/logs/
+RUN chmod  -R 777 /jars
+
+
+ADD admin.jar  /jars/admin.jar
+ADD jmx_prometheus_javaagent-1.0.1.jar /jars/jmx_prometheus_javaagent-1.0.1.jar
+ADD config.yaml /jars/config.yaml
+EXPOSE 9250
+EXPOSE 9950
+
+
+ENTRYPOINT ["java", "-javaagent:jmx_prometheus_javaagent-1.0.1.jar=9950:config.yaml", "-jar", "/jars/business-admin.jar", "--spring.profiles.active=uat"]cat business-admin-Dockerfile
+
+
+wget https://repo1.maven.org/maven2/io/crate/crate-jmx-exporter/1.0.0/crate-jmx-exporter-1.0.0.jar
+
+docker build -f admin-Dockerfile -t admin:jvm .
+
+----------
+
+cat /opt/docker-monitor/conf/prometheus.yml
+
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: 'container'
+    static_configs:
+      - targets: ['10.10.39.185:9080']
+  - job_name: jvm
+    static_configs:
+      - targets: ['10.10.38.153:9950']
+
+
+grafana  Dashboard  id 
+14845
